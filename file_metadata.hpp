@@ -16,7 +16,7 @@ class file_metadata{
   
  
   public:
-	 file_metadata(filesystem::path& _path);
+	 file_metadata(filesystem::path _path);
 	 ~file_metadata();
 	 filesystem::path path;
 	 int file_size;
