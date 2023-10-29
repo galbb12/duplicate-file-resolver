@@ -1,3 +1,0 @@
-/home/gal/Documents/duplicate_file_resolver/CMakeFiles/compiled-exe.dir
-/home/gal/Documents/duplicate_file_resolver/CMakeFiles/edit_cache.dir
-/home/gal/Documents/duplicate_file_resolver/CMakeFiles/rebuild_cache.dir
