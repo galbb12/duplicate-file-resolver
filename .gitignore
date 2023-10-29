@@ -1,1 +1,3 @@
-CMakeFile/*
+**
+!src/*
+!CMakeLists.txt
