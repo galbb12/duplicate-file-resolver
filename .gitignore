@@ -1,2 +1,5 @@
 CMakeCache.txt
 CMakeFile/*
+cmake_install.cmake
+compiled-exe
+xaa
