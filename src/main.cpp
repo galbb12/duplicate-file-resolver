@@ -41,15 +41,17 @@ void remove_duplicate(filesystem::path folder_path)
 	vector<file_metadata> vector_of_files;
 	for (const fs::path &file : fs::recursive_directory_iterator(folder_path))
 	{
-		if (!filesystem::is_directory(file))
+		if (filesystem::is_regular_file(file))
 		{
 			file_metadata curr_file = file_metadata(file);
-			cout << curr_file.hash_value <<"," << curr_file.path<< endl;
 			for (vector<file_metadata>::iterator ptr = vector_of_files.begin(); ptr < vector_of_files.end(); ptr++)
 			{
-				if ((*ptr).hash_value == curr_file.hash_value)
+				if ((*ptr).file_size == curr_file.file_size)
 				{
-					cout << file << endl;
+					if (!curr_file.get_md5_hash().compare((*ptr).get_md5_hash()))
+					{
+						cout << "found duplicate: " << curr_file.path << " " << (*ptr).path << endl;
+					}
 				}
 			}
 			vector_of_files.push_back(file_metadata(file));
