@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
 
 void remove_duplicate(filesystem::path folder_path)
 {
+	long int file_count = 0;
+	long int duplicate_count = 0;
 	vector<file_metadata> vector_of_files;
 	for (const fs::path &file : fs::recursive_directory_iterator(folder_path))
 	{
@@ -50,11 +52,14 @@ void remove_duplicate(filesystem::path folder_path)
 				{
 					if (!curr_file.get_md5_hash().compare((*ptr).get_md5_hash()))
 					{
-						cout << "found duplicate: " << curr_file.path << " " << (*ptr).path << endl;
+						//cout << "found duplicate: " << curr_file.path << " " << (*ptr).path << endl;
 					}
 				}
 			}
 			vector_of_files.push_back(file_metadata(file));
+			file_count++;
+			cout << "\rfile count: " << file_count << endl << "duplicate count: " << file_count;
 		}
 	}
+	cout << endl;
 }
