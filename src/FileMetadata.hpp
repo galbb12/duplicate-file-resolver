@@ -13,11 +13,11 @@ using namespace std;
 
 class FileMetadata{
   private:
-     string md5_hash_cache_;
+     unsigned char* md5_hash_cache_;
   public:
 	 FileMetadata(filesystem::path _path);
-	 ~FileMetadata();
-	 string getMd5Hash();
+	 void ClearMd5();
+	 unsigned char* getMd5Hash();
 	 filesystem::path path;
 	 int file_size;
 };

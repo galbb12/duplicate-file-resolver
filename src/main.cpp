@@ -53,17 +53,23 @@ void remove_duplicate(filesystem::path folder_path)
 				if (ptr->processFile(curr_file))
 				{
 					found_duplicate_flag = 1;
-					//cout << "found duplicate: " << curr_file.path << " " << ptr->file_list.at(0).path << endl;
+					// cout << "found duplicate: " << curr_file.path << " " << ptr->file_list.at(0).path << endl;
 					duplicate_count++;
 					break;
 				}
 			}
-			if(!found_duplicate_flag){
+			if (!found_duplicate_flag)
+			{
 				vector_of_files_collections.push_back(DuplicateFileCollection(curr_file));
 			}
+				cout << "file count: " << file_count << ", duplicate_filterd_count: " << vector_of_files_collections.size() << endl;
 			file_count++;
-			cout << "file count: " << file_count << ", duplicate_filterd_count: " << vector_of_files_collections.size() << endl;
 		}
+	}
+
+	for (vector<DuplicateFileCollection>::iterator ptr = vector_of_files_collections.begin(); ptr < vector_of_files_collections.end(); ptr++)
+	{
+		(*ptr).clear();
 	}
 	cout << endl;
 }
