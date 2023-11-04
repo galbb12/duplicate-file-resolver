@@ -8,9 +8,9 @@ using namespace std;
 
 class DuplicateFileCollection{
     public:
-     DuplicateFileCollection(FileMetadata init_file_metadata);
+     DuplicateFileCollection(FileMetadata& init_file_metadata);
      string hash;
      long int file_size;
      vector<FileMetadata> file_list;
-     int processFile(FileMetadata file_metadata);
+     int processFile(FileMetadata& file_metadata);
 };

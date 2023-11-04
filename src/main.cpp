@@ -60,9 +60,9 @@ void remove_duplicate(filesystem::path folder_path)
 			}
 			if(!found_duplicate_flag){
 				vector_of_files_collections.push_back(DuplicateFileCollection(curr_file));
-				cout << "\rfile count: " << file_count << ", duplicate_filterd_count: " << vector_of_files_collections.size();
 			}
 			file_count++;
+			cout << "file count: " << file_count << ", duplicate_filterd_count: " << vector_of_files_collections.size() << endl;
 		}
 	}
 	cout << endl;
