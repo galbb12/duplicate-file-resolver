@@ -2,7 +2,8 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-#include "file_metadata.hpp"
+
+#include "DuplicateFilesCollection.hpp"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -40,25 +41,28 @@ void remove_duplicate(filesystem::path folder_path)
 {
 	long int file_count = 0;
 	long int duplicate_count = 0;
-	vector<file_metadata> vector_of_files;
+	vector<DuplicateFileCollection> vector_of_files_collections;
 	for (const fs::path &file : fs::recursive_directory_iterator(folder_path))
 	{
 		if (filesystem::is_regular_file(file))
 		{
-			file_metadata curr_file = file_metadata(file);
-			for (vector<file_metadata>::iterator ptr = vector_of_files.begin(); ptr < vector_of_files.end(); ptr++)
+			FileMetadata curr_file(file);
+			int found_duplicate_flag = 0;
+			for (vector<DuplicateFileCollection>::iterator ptr = vector_of_files_collections.begin(); ptr < vector_of_files_collections.end(); ptr++)
 			{
-				if ((*ptr).file_size == curr_file.file_size)
+				if (ptr->processFile(curr_file))
 				{
-					if (!curr_file.get_md5_hash().compare((*ptr).get_md5_hash()))
-					{
-						//cout << "found duplicate: " << curr_file.path << " " << (*ptr).path << endl;
-					}
+					found_duplicate_flag = 1;
+					//cout << "found duplicate: " << curr_file.path << " " << ptr->file_list.at(0).path << endl;
+					duplicate_count++;
+					break;
 				}
 			}
-			vector_of_files.push_back(file_metadata(file));
+			if(!found_duplicate_flag){
+				vector_of_files_collections.push_back(DuplicateFileCollection(curr_file));
+				cout << "\rfile count: " << file_count << ", duplicate_filterd_count: " << vector_of_files_collections.size();
+			}
 			file_count++;
-			cout << "\rfile count: " << file_count << endl << "duplicate count: " << file_count;
 		}
 	}
 	cout << endl;
