@@ -1,7 +1,9 @@
+#include <filesystem>
 #include <iostream>
 #include <string>
+#include <map>
+#include <map>
 #include <vector>
-#include <filesystem>
 
 #include "DuplicateFilesCollection.hpp"
 
@@ -11,7 +13,9 @@ void remove_duplicate(filesystem::path folder_path);
 
 int main(int argc, char *argv[])
 {
-	// root_run_path is the path which the program will start running on it means that the program will run on all sub directories of the directory in the path
+	// root_run_path is the path which the program will start running on it means
+	// that the program will run on all sub directories of the directory in the
+	// path
 	string root_run_path = "";
 	if (argc < 2)
 	{
@@ -42,34 +46,46 @@ void remove_duplicate(filesystem::path folder_path)
 	long int file_count = 0;
 	long int duplicate_count = 0;
 	vector<DuplicateFileCollection> vector_of_files_collections;
+	 map<long int, map<string, DuplicateFileCollection>>
+		*umapSize = new map<long int, map<string, DuplicateFileCollection>>();
+	// map<string, DuplicateFileCollection> *umapCrc = new ;
 	for (const fs::path &file : fs::recursive_directory_iterator(folder_path))
 	{
 		if (filesystem::is_regular_file(file))
 		{
 			FileMetadata curr_file(file);
-			int found_duplicate_flag = 0;
-			for (vector<DuplicateFileCollection>::iterator ptr = vector_of_files_collections.begin(); ptr < vector_of_files_collections.end(); ptr++)
+			if (true)
 			{
-				if (ptr->processFile(curr_file))
+				map<string, DuplicateFileCollection> umapCrc;
+				if (umapSize->contains(curr_file.file_size))
 				{
-					found_duplicate_flag = 1;
-					// cout << "found duplicate: " << curr_file.path << " " << ptr->file_list.at(0).path << endl;
-					duplicate_count++;
-					break;
+					map<string, DuplicateFileCollection> umapCrc = umapSize->at(curr_file.file_size);
+					if (umapCrc.contains(curr_file.getCrc()) &&
+						umapCrc.at(curr_file.getCrc()).hash == curr_file.getMd5Hash())
+					{
+						umapCrc.at(curr_file.getCrc()).file_list.push_back(curr_file);
+					}
+					else
+					{
+						umapCrc.emplace(curr_file.getCrc(),
+										DuplicateFileCollection(curr_file));
+						duplicate_count++;
+					}
 				}
+				else
+				{
+					map<string, DuplicateFileCollection> umapCrc;
+					umapCrc.emplace(curr_file.getCrc(),
+									DuplicateFileCollection(curr_file));
+					umapSize->emplace(curr_file.file_size,umapCrc);
+					duplicate_count++;
+				}
+				cout << "file count: " << file_count
+					 << ", duplicate_filterd_count: " << duplicate_count << endl;
+				file_count++;
 			}
-			if (!found_duplicate_flag)
-			{
-				vector_of_files_collections.push_back(DuplicateFileCollection(curr_file));
-			}
-				cout << "file count: " << file_count << ", duplicate_filterd_count: " << vector_of_files_collections.size() << endl;
-			file_count++;
 		}
 	}
-
-	for (vector<DuplicateFileCollection>::iterator ptr = vector_of_files_collections.begin(); ptr < vector_of_files_collections.end(); ptr++)
-	{
-		(*ptr).clear();
-	}
+	delete umapSize;
 	cout << endl;
 }
